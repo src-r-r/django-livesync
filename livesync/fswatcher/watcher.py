@@ -1,4 +1,6 @@
 from watchdog.observers import Observer
+import os
+import logging; log = logging.getLogger(__name__)
 
 
 class FileWatcher(object):
@@ -9,6 +11,10 @@ class FileWatcher(object):
     def _schedule_all(self):
         for handler in self.handlers:
             for path in handler.watched_paths:
+                path = os.path.abspath(path)
+                if not os.path.exists(path):
+                    log.warn("Not adding path {}".format(path))
+                    continue
                 self.observer.schedule(handler, path, recursive=True)
 
     def add_handler(self, handler):
