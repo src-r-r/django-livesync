@@ -13,7 +13,7 @@ class DjangoLiveSyncMiddleware(object):
 
     @staticmethod
     def process_response(request, response):
-        if settings.DEBUG and 'text/html' in response['Content-Type']:
+        if settings.DEBUG and 'text/html' in response.get('Content-Type', ''):
             script_settings = """
                 <script type='text/javascript'>
                     window.DJANGO_LIVESYNC = {{'HOST': '{host}', 'PORT': {port} }}
